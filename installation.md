@@ -1,52 +1,60 @@
-# Installation
+# Installation procedures 
 
-### Docker Containers Management Commands
-
-Show all containers (running + stopped)
-```shell
-docker ps -a
+Clone docker version
+```ssh
+git clone https://github.com/openimis/openimis-dist_dkr.git && cd openimis-dist_dkr
 ```
 
-Show only running containers
-```shell
-docker ps
+Create virtual environment by run the following commands 
+```ssh
+python3.10 -m venv env && source env/bin/activate
 ```
 
-Add formatting for better readability
-```shell
-docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}"
+## For the backend
+
+Install python3.10 (If not installed)
+```ssh
+brew install python@3.10
 ```
 
-Stop container
-```shell
-docker stop <container_name|container_id>
+Clone backend project `openimis-be_py`
+```ssh
+git clone https://github.com/openimis/openimis-be_py.git && cd openimis-be_py
 ```
 
-Remove container
-```shell
-docker rm -f <container_name|container_id>
+Install dependencies 
+```ssh
+cd openIMIS && pip install -r requirements.tx
 ```
 
-### Docker Images Management Commands
-
-List images
-```shell
-docker images
+Generate openIMIS modules 
+```ssh
+cd ../scripts && python modules-requirements.py ../openimis.json > modules-requirements.txt
 ```
 
-Remove image
-```shell
-docker rmi -f <image_id|image_name>
+Install openIMIS current modules
+```ssh
+cd ../openIMIS && pip install -r modules-requirements.txt
 ```
 
-### Docker Volumes Management Commands
-
-List all volumes
-```shell
-docker volume ls
+Copy the example environment setup and adjust the settings
+```ssh
+cd .. && cp .env .env.example
 ```
 
-Delete a specific volume
-```shell
-docker volume rm <volume_name>
+Start openIMIS from within(to see if everything is working correctly)
+```ssh
+cd openIMIS && python manage.py runserver
+```
+
+### After everything go to project root directory (docker version) 
+
+Change permissions of `deploy_openimis.sh` to executable 
+```ssh
+chmod +x deploy_openimis.sh
+```
+
+Run the followimng command start services
+```ssh
+./deploy_openimis.sh
 ```
